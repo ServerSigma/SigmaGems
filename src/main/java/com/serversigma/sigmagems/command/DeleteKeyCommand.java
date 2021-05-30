@@ -16,9 +16,10 @@ public class DeleteKeyCommand {
             name = "key.deletar",
             target = CommandTarget.PLAYER,
             permission = "sigmapoints.admin",
-            usage = "key deletar <quantia>",
+            usage = "key deletar <key>",
             async = true
     )
+
     public void deleteKey(Context<Player> sender, String[] args) {
 
         Player player = sender.getSender();
@@ -34,4 +35,5 @@ public class DeleteKeyCommand {
             player.sendMessage("§cKey inválida.");
         }
     }
+
 }

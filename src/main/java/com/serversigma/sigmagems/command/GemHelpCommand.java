@@ -18,15 +18,15 @@ public class GemHelpCommand {
 
         Player player = sender.getSender();
 
-
         player.sendMessage("");
         player.sendMessage("§2Sigmas Gemas - Menu de Ajuda");
         player.sendMessage("");
         player.sendMessage("§2- /gemas §7(Use para olhar os seus gemas)");
         player.sendMessage("§2- /gemas [jogador] §7(Use para olhar os pontos do jogador.");
-        player.sendMessage("§2- /gemas enviar [jogador] [quantia] §7(Use para enviar certa quantia de gemas para jogadores)");
+        player.sendMessage("§2- /gemas enviar [jogador] [quantia] §7(Enviar certa quantia de gemas para jogadores)");
         player.sendMessage("§2- /gemas top §7(Use para ver o top 5 gemas do servidor)");
         player.sendMessage("§2- /key ativar [key] §7(Use para ativar gemas)");
+
         if (player.hasPermission("sigmapoints.admin")) {
             player.sendMessage("§4- §c/gemas setar [jogador] [quantia]");
             player.sendMessage("§4- §c/gemas resetar [jogador]");

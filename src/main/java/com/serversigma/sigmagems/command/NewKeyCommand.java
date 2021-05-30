@@ -39,9 +39,12 @@ public class NewKeyCommand {
         String key = RandomStringUtils.random(20, true, true);
         keyManager.addKey(key, amount);
         player.sendMessage("");
-        player.sendMessage("     §2[SigmaGemas] §aVocê gerou uma chave. \n ");
-        messageUtils.sendSuggestCommandText(player, "           §a(Clique AQUI para usar)", "§7Clique nessa mensagem para usar", "key ativar " + key);
-        messageUtils.sendSuggestCommandText(player, "           §c(Clique AQUI para deletar)", "§7Clique nessa mensagem para deletar", "key deletar " + key);
+        player.sendMessage("§2[SigmaGemas] §aVocê gerou uma chave. \n ");
+        messageUtils.sendSuggestCommandText(player, "           " +
+                "§a(Clique AQUI para usar)", "§7Clique nessa mensagem para usar", "key ativar " + key);
+
+        messageUtils.sendSuggestCommandText(player, "           " +
+                "§c(Clique AQUI para deletar)", "§7Clique nessa mensagem para deletar", "key deletar " + key);
         player.sendMessage("");
 
     }

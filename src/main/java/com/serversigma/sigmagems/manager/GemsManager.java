@@ -21,13 +21,13 @@ public class GemsManager {
 
     public void saveAll() {
         long startTime = System.currentTimeMillis();
-        for (Map.Entry<UUID, Integer> map : gemsCache.getPlayersCached().entrySet()) {
+        for (Map.Entry<UUID, Integer> map : gemsCache.getCachedPlayers().entrySet()) {
             UUID uuid = map.getKey();
             int amount = map.getValue();
             setGem(uuid, amount);
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
-            gemsCache.getPlayersCached().put(player.getUniqueId(), getGems(player.getUniqueId()));
+            gemsCache.getCachedPlayers().put(player.getUniqueId(), getGems(player.getUniqueId()));
         }
         long time = System.currentTimeMillis() - startTime;
         Bukkit.getLogger().info("Gems cache saved to database. (" + time + "ms)");

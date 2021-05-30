@@ -2,6 +2,7 @@ package com.serversigma.sigmagems.command;
 
 import com.serversigma.sigmagems.manager.KeyManager;
 import com.serversigma.sigmagems.utilitie.InteractChat;
+import com.serversigma.sigmagems.utilitie.NumberUtils;
 import lombok.RequiredArgsConstructor;
 import me.saiintbrisson.minecraft.command.annotation.Command;
 import me.saiintbrisson.minecraft.command.command.Context;
@@ -26,7 +27,10 @@ public class ListKeyCommand {
 
         player.sendMessage("");
         player.sendMessage("§7Clique em uma dessas para copiar e poder usa-lo. \n ");
-        keyManager.getKeys().forEach(key -> interactChat.sendSuggestCommandText(player, "§2" + key.getKey() + " §f| §aPontos: §2" + key.getAmount(), "§7Clique nessa mensagem para usar", "key ativar " + key.getKey()));
+        keyManager.getKeys().forEach(
+                key -> interactChat.sendSuggestCommandText
+                        (player, "§2" + key.getKey() + " §f| §aPontos: §2" + NumberUtils.format(key.getAmount()),
+                                "§7Clique nessa mensagem para usar", "key ativar " + key.getKey()));
         player.sendMessage("");
     }
 }

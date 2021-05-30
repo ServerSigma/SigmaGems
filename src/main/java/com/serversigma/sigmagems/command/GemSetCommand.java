@@ -1,6 +1,7 @@
 package com.serversigma.sigmagems.command;
 
 import com.serversigma.sigmagems.cache.GemsCache;
+import com.serversigma.sigmagems.utilitie.NumberUtils;
 import lombok.RequiredArgsConstructor;
 import me.saiintbrisson.minecraft.command.annotation.Command;
 import me.saiintbrisson.minecraft.command.command.Context;
@@ -42,7 +43,8 @@ public class GemSetCommand {
         int amount = Integer.parseInt(args[1]);
 
         gemsCache.setGems(target.getUniqueId(), amount);
-        player.sendMessage(String.format("§2[SigmaGemas] §aVocê setou §2%d §agemas para §2%s", amount, target.getName()));
+        player.sendMessage(String.format("§2[SigmaGemas] §aVocê setou §2%s §agemas para §2%s",
+                NumberUtils.format(amount), target.getName()));
 
     }
 

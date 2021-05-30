@@ -2,6 +2,7 @@ package com.serversigma.sigmagems.command;
 
 import com.serversigma.sigmagems.cache.GemsCache;
 import com.serversigma.sigmagems.manager.GemsManager;
+import com.serversigma.sigmagems.utilitie.NumberUtils;
 import lombok.RequiredArgsConstructor;
 import me.saiintbrisson.minecraft.command.annotation.Command;
 import me.saiintbrisson.minecraft.command.annotation.Optional;
@@ -20,17 +21,18 @@ public class Gem {
             name = "gemas",
             aliases = {"gema", "gems"},
             target = CommandTarget.PLAYER,
-            usage = "gemas <player>",
+            usage = "gemas",
             async = true
     )
     public void cashViewCommand(Context<Player> context, @Optional String[] args) {
         Player player = context.getSender();
 
         if (args == null) {
-            if (!cache.getPlayersCached().containsKey(player.getUniqueId())) {
+            if (!cache.getCachedPlayers().containsKey(player.getUniqueId())) {
                 cache.setGems(player.getUniqueId(), gemsManager.getGems(player.getUniqueId()));
             }
-            player.sendMessage(String.format("§2[SigmaGemas] §aAtualmente você tem §2%d §agemas", cache.getGems(player.getUniqueId())));
+            player.sendMessage(String.format("§2[SigmaGemas] §aAtualmente você tem §2%s §agemas",
+                    NumberUtils.format(cache.getGems(player.getUniqueId()))));
             return;
         }
 
@@ -41,7 +43,8 @@ public class Gem {
                 player.sendMessage("§cEste jogador está offline.");
                 return;
             }
-            player.sendMessage(String.format("§2[SigmaGemas] §aO jogador §2%s §atem §2%d §agemas.", target.getName(), cache.getGems(target.getUniqueId())));
+            player.sendMessage(String.format("§2[SigmaGemas] §aO jogador §2%s §atem §2%s §agemas.",
+                    target.getName(), NumberUtils.format(cache.getGems(target.getUniqueId()))));
         }
     }
 }

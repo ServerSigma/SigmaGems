@@ -12,20 +12,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GemsCache {
 
-    private final Map<UUID, Integer> playersCached = new HashMap<>();
+    private final Map<UUID, Integer> cachedPlayers = new HashMap<>();
     private final SQLProvider sqlProvider;
 
-    public boolean contains(UUID uuid) {
-        return playersCached.containsKey(uuid);
-    }
-
     public int getGems(UUID uuid) {
-        return playersCached.get(uuid);
+        return cachedPlayers.get(uuid);
     }
-
 
     public void setGems(UUID id, int amount) {
-        playersCached.put(id, amount);
+        cachedPlayers.put(id, amount);
     }
 
     public void addGems(UUID id, int amount) {

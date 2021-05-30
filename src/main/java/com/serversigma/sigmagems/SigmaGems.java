@@ -8,7 +8,7 @@ import com.serversigma.sigmagems.listener.PlayerJoinListener;
 import com.serversigma.sigmagems.listener.PlayerQuitListener;
 import com.serversigma.sigmagems.manager.GemsManager;
 import com.serversigma.sigmagems.manager.KeyManager;
-import com.serversigma.sigmagems.placeholder.PointsPlaceHolderHook;
+import com.serversigma.sigmagems.placeholder.GemsPlaceHolder;
 import com.serversigma.sigmagems.runnable.GemsRunnable;
 import com.serversigma.sigmagems.sql.SQLProvider;
 import com.serversigma.sigmagems.sql.SQLTables;
@@ -16,28 +16,27 @@ import com.serversigma.sigmagems.utilitie.InteractChat;
 import me.saiintbrisson.bukkit.command.BukkitFrame;
 import me.saiintbrisson.bukkit.command.executor.BukkitSchedulerExecutor;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 public final class SigmaGems extends JavaPlugin {
 
+    private GemsCache gemsCache;
     private SQLProvider provider;
+    private KeyManager keyManager;
     private BukkitTask gemsRunnable;
     private GemsManager gemsManager;
-    private PointsPlaceHolderHook placeholder;
+    private GemsPlaceHolder placeholder;
 
     @Override
     public void onEnable() {
-        provider = new SQLProvider(this, "storage.db");
-        GemsCache gemsCache = new GemsCache(provider);
-        gemsManager = new GemsManager(provider, gemsCache);
-        placeholder = new PointsPlaceHolderHook(this, gemsCache);
-        placeholder.register();
-        KeyManager keyManager = new KeyManager(provider);
 
-        getLogger().info("Placeholder registered with sucessfully.");
+        provider = new SQLProvider(this, "storage.db");
+        gemsCache = new GemsCache(provider);
+        gemsManager = new GemsManager(provider, gemsCache);
+        keyManager = new KeyManager(provider);
+
         InteractChat interactChat = new InteractChat();
 
         if (provider.openConnection()) {
@@ -51,6 +50,9 @@ public final class SigmaGems extends JavaPlugin {
         BukkitFrame frame = new BukkitFrame(this);
         frame.setExecutor(new BukkitSchedulerExecutor(this));
 
+        InventoryManager.enable(this);
+        placeholder = new GemsPlaceHolder(this, gemsCache);
+        placeholder.register();
 
         registerListeners(
                 new PlayerQuitListener(gemsCache, gemsManager),
@@ -60,7 +62,7 @@ public final class SigmaGems extends JavaPlugin {
 
         frame.registerCommands(
                 new Gem(gemsCache, gemsManager),
-                new GemGiveCommand(gemsCache),
+                new GemPayCommand(gemsCache),
                 new GemHelpCommand(),
                 new GemResetCommand(gemsCache),
                 new GemSetCommand(gemsCache),
@@ -71,10 +73,7 @@ public final class SigmaGems extends JavaPlugin {
                 new NewKeyCommand(keyManager, interactChat),
                 new UseKeyCommand(keyManager, gemsCache),
                 new DeleteKeyCommand(keyManager)
-
         );
-        InventoryManager.enable(this);
-
     }
 
     @Override
@@ -90,4 +89,5 @@ public final class SigmaGems extends JavaPlugin {
             Bukkit.getPluginManager().registerEvents(listener, this);
         }
     }
+
 }

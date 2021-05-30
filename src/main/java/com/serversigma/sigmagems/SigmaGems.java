@@ -13,38 +13,32 @@ import com.serversigma.sigmagems.runnable.GemsRunnable;
 import com.serversigma.sigmagems.sql.SQLProvider;
 import com.serversigma.sigmagems.sql.SQLTables;
 import com.serversigma.sigmagems.utilitie.InteractChat;
-import com.serversigma.sigmagems.utilitie.MessageUtils;
-import me.bristermitten.pdm.PluginDependencyManager;
 import me.saiintbrisson.bukkit.command.BukkitFrame;
 import me.saiintbrisson.bukkit.command.executor.BukkitSchedulerExecutor;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 public final class SigmaGems extends JavaPlugin {
 
     private SQLProvider provider;
+    private BukkitTask gemsRunnable;
     private GemsManager gemsManager;
+    private PointsPlaceHolderHook placeholder;
 
     @Override
     public void onEnable() {
         provider = new SQLProvider(this, "storage.db");
         GemsCache gemsCache = new GemsCache(provider);
         gemsManager = new GemsManager(provider, gemsCache);
-        PointsPlaceHolderHook placeholder = new PointsPlaceHolderHook(this, gemsCache);
+        placeholder = new PointsPlaceHolderHook(this, gemsCache);
         placeholder.register();
         KeyManager keyManager = new KeyManager(provider);
-        MessageUtils messageUtils = new MessageUtils();
 
         getLogger().info("Placeholder registered with sucessfully.");
         InteractChat interactChat = new InteractChat();
-
-        PluginDependencyManager.of(this)
-                .loadAllDependencies()
-                .exceptionally(throwable -> {
-                    getLogger().severe(throwable.getMessage());
-                    return null;
-                }).join();
 
         if (provider.openConnection()) {
             getLogger().info("Connection with SQLite opened with sucessfully.");
@@ -53,7 +47,7 @@ public final class SigmaGems extends JavaPlugin {
 
         }
         gemsManager.saveAll();
-        new GemsRunnable(gemsManager).runTaskTimer(this, 20 * 30, 20 * 30);
+        gemsRunnable = new GemsRunnable(gemsManager).runTaskTimer(this, 300 * 20, 300 * 20);
         BukkitFrame frame = new BukkitFrame(this);
         frame.setExecutor(new BukkitSchedulerExecutor(this));
 
@@ -85,7 +79,9 @@ public final class SigmaGems extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        gemsRunnable.cancel();
         gemsManager.saveAll();
+        placeholder.unregister();
         provider.closeConnection();
     }
 

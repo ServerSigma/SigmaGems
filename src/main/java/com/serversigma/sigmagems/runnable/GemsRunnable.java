@@ -13,6 +13,5 @@ public class GemsRunnable extends BukkitRunnable {
     @Override
     public void run() {
         gemsManager.saveAll();
-        Bukkit.getConsoleSender().sendMessage("[SigmaGemas] All acount have ben saved in database.");
     }
 }

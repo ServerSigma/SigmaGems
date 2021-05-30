@@ -1,7 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'me.bristermitten.pdm' version '0.0.30'
     id 'java'
 }
 
@@ -24,8 +23,8 @@ repositories {
 
 dependencies {
     compileOnly 'me.clip:placeholderapi:2.10.9'
-    pdm 'com.github.SaiintBrisson.command-framework:bukkit:1.2.0'
-    pdm 'com.github.HenryFabio:inventory-api:2.0.3'
+    implementation 'com.github.SaiintBrisson.command-framework:bukkit:1.2.0'
+    implementation 'com.github.HenryFabio:inventory-api:2.0.3'
 
     implementation 'org.xerial:sqlite-jdbc:3.8.11.2'
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'

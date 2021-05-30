@@ -40,7 +40,7 @@ public class PointsPlaceHolderHook extends PlaceholderExpansion {
     }
 
     public String format(Number number) {
-        char[] suffix = {' ', 'k', 'm', 'b', 't', 'p', 'e'};
+        char[] suffix = {' ', 'k', 'M', 'B', 'T', 'Q'};
         long numValue = number.longValue();
         int value = (int) Math.floor(Math.log10(numValue));
         int base = value / 3;

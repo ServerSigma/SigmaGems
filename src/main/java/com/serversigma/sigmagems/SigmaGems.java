@@ -13,6 +13,7 @@ import com.serversigma.sigmagems.runnable.GemsRunnable;
 import com.serversigma.sigmagems.sql.SQLProvider;
 import com.serversigma.sigmagems.sql.SQLTables;
 import com.serversigma.sigmagems.utilitie.InteractChat;
+import lombok.Getter;
 import me.saiintbrisson.bukkit.command.BukkitFrame;
 import me.saiintbrisson.bukkit.command.executor.BukkitSchedulerExecutor;
 import org.bukkit.Bukkit;
@@ -22,7 +23,9 @@ import org.bukkit.scheduler.BukkitTask;
 
 public final class SigmaGems extends JavaPlugin {
 
-    private GemsCache gemsCache;
+    @Getter public static SigmaGems instance;
+    @Getter private GemsCache gemsCache;
+
     private SQLProvider provider;
     private KeyManager keyManager;
     private BukkitTask gemsRunnable;
@@ -31,7 +34,7 @@ public final class SigmaGems extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
+        instance = this;
         provider = new SQLProvider(this, "storage.db");
         gemsCache = new GemsCache(provider);
         gemsManager = new GemsManager(provider, gemsCache);

@@ -20,10 +20,10 @@ public class GemTopCommand {
             name = "gemas.top",
             aliases = {"rank", "ranking"},
             target = CommandTarget.PLAYER,
-            usage = "gemas top",
-            async = true
+            usage = "gemas top"
     )
-    public void cashGiveCommand(Context<Player> contexts) {
+
+    public void gemsTopCommand(Context<Player> contexts) {
         Player player = contexts.getSender();
 
         RankingInventory rankingInventory = new RankingInventory(gemsManager);

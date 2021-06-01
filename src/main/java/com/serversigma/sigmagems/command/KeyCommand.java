@@ -12,10 +12,10 @@ public class KeyCommand {
             name = "key",
             aliases = {"chave"},
             target = CommandTarget.PLAYER,
-            usage = "key",
-            async = true
+            usage = "key"
     )
-    public void cashViewCommand(Context<Player> context) {
+
+    public void keyCommand(Context<Player> context) {
         Player player = context.getSender();
 
         player.sendMessage("");

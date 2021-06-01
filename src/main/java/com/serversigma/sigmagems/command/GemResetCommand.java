@@ -18,10 +18,9 @@ public class GemResetCommand {
             aliases = {"resetar"},
             target = CommandTarget.PLAYER,
             permission = "sigmagems.admin",
-            usage = "gemas resetar <player>",
-            async = true
+            usage = "gemas resetar <player>"
     )
-    public void cashReset(Context<Player> context, String[] args) {
+    public void gemsReset(Context<Player> context, String[] args) {
 
         Player player = context.getSender();
         if (args.length != 1) {

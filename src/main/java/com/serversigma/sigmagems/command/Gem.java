@@ -21,10 +21,9 @@ public class Gem {
             name = "gemas",
             aliases = {"gema", "gems"},
             target = CommandTarget.PLAYER,
-            usage = "gemas",
-            async = true
+            usage = "gemas"
     )
-    public void cashViewCommand(Context<Player> context, @Optional String[] args) {
+    public void gemsViewCommand(Context<Player> context, @Optional String[] args) {
         Player player = context.getSender();
 
         if (args == null) {

@@ -19,10 +19,10 @@ public class NewKeyCommand {
             name = "key.gerar",
             target = CommandTarget.PLAYER,
             permission = "sigmapoints.admin",
-            usage = "key gerar <quantia>",
-            async = true
+            usage = "key gerar <quantia>"
     )
-    public void cashSet(Context<Player> context, String[] args) {
+
+    public void keyCreate(Context<Player> context, String[] args) {
 
         Player player = context.getSender();
         if (args.length != 1) {

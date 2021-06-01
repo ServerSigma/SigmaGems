@@ -19,10 +19,10 @@ public class UseKeyCommand {
             name = "key.ativar",
             aliases = {"use"},
             target = CommandTarget.PLAYER,
-            usage = "key ativar",
-            async = true
+            usage = "key ativar"
     )
-    public void keyListCommand(Context<Player> sender, String[] args) {
+
+    public void keyUseCommand(Context<Player> sender, String[] args) {
 
         Player player = sender.getSender();
         if(args.length != 1) {

@@ -10,22 +10,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 @RequiredArgsConstructor
-public class GemSetCommand {
+public class GemGiveCommand {
 
     private final GemsCache gemsCache;
 
     @Command(
-            name = "gemas.set",
-            aliases = {"setar"},
+            name = "gemas.give",
+            aliases = {"add, adicionar"},
             target = CommandTarget.PLAYER,
             permission = "sigmagems.admin",
-            usage = "gemas setar <player> <amount>"
+            usage = "gemas add <player> <amount>"
     )
-    public void gemsSet(Context<Player> context, String[] args) {
+    public void gemsGive(Context<Player> context, String[] args) {
 
         Player player = context.getSender();
         if (args.length != 2) {
-            player.sendMessage("§cUse: /gemas setar <player> <quantia>");
+            player.sendMessage("§cUse: /gemas add <player> <quantia>");
             return;
         }
 
@@ -41,8 +41,8 @@ public class GemSetCommand {
         }
         int amount = Integer.parseInt(args[1]);
 
-        gemsCache.setGems(target.getUniqueId(), amount);
-        player.sendMessage(String.format("§2[SigmaGemas] §aVocê setou §2%s §agemas para §2%s",
+        gemsCache.addGems(target.getUniqueId(), amount);
+        player.sendMessage(String.format("§2[SigmaGemas] §aVocê adicionou §2%s gemas §apara §2%s",
                 NumberUtils.format(amount), target.getName()));
 
     }

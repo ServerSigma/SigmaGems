@@ -19,9 +19,9 @@ public class ListKeyCommand {
             name = "key.lista",
             aliases = {"list"},
             target = CommandTarget.PLAYER,
-            usage = "key lista",
-            async = true
+            usage = "key lista"
     )
+
     public void keyListCommand(Context<Player> sender) {
         Player player = sender.getSender();
 

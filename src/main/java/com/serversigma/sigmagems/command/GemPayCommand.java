@@ -18,8 +18,7 @@ public class GemPayCommand {
             name = "gemas.enviar",
             aliases = {"pay", "send", "pagar", "transferir"},
             target = CommandTarget.PLAYER,
-            usage = "gemas enviar <player> <amount>",
-            async = true
+            usage = "gemas enviar <player> <amount>"
     )
 
     public void gemsPayCommand(Context<Player> context, String[] args) {

@@ -67,6 +67,8 @@ public final class SigmaGems extends JavaPlugin {
                 new Gem(gemsCache, gemsManager),
                 new GemPayCommand(gemsCache),
                 new GemHelpCommand(),
+                new GemSaveCommand(gemsManager),
+                new GemGiveCommand(gemsCache),
                 new GemResetCommand(gemsCache),
                 new GemSetCommand(gemsCache),
                 new GemTopCommand(gemsManager),

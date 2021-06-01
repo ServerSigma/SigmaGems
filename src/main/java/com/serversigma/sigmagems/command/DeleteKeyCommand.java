@@ -16,8 +16,7 @@ public class DeleteKeyCommand {
             name = "key.deletar",
             target = CommandTarget.PLAYER,
             permission = "sigmapoints.admin",
-            usage = "key deletar <key>",
-            async = true
+            usage = "key deletar <key>"
     )
 
     public void deleteKey(Context<Player> sender, String[] args) {

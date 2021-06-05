@@ -2,8 +2,6 @@ package com.serversigma.sigmagems.sql;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.bukkit.Bukkit;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
 import org.sqlite.JDBC;
 
@@ -38,17 +36,16 @@ public abstract class SQLConnection {
 
     @SneakyThrows
     public void closeConnection() {
-        ConsoleCommandSender sender = Bukkit.getConsoleSender();
         if (hasConnection()) {
             con.close();
-            sender.sendMessage("[SigmaPoints] Connection with SQLite closed with sucessfully");
+            plugin.getLogger().info("[SigmaPoints] Connection with SQLite closed with sucessfully");
         } else {
-            sender.sendMessage("[SigmaPoints] Connection with SQLite already closed.");
+            plugin.getLogger().severe("[SigmaPoints] Connection with SQLite already closed.");
         }
     }
 
     @SneakyThrows
     public boolean hasConnection() {
-        return getCon() != null && !getCon().isClosed();
+        return con != null && !con.isClosed();
     }
 }

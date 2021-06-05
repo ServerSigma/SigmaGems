@@ -1,4 +1,4 @@
 name: SigmaGems
 version: @version@
-authors: [DevTuca]
+authors: ["DevTuca"]
 main: com.serversigma.sigmagems.SigmaGems

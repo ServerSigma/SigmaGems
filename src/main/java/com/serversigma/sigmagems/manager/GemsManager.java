@@ -20,15 +20,15 @@ public class GemsManager {
     private final GemsCache gemsCache;
 
     public void saveAll() {
+
+        if(gemsCache.getCachedPlayers().isEmpty()) return;
+
         new Thread(() -> {
             long startTime = System.currentTimeMillis();
             for (Map.Entry<UUID, Integer> map : gemsCache.getCachedPlayers().entrySet()) {
                 UUID uuid = map.getKey();
                 int amount = map.getValue();
                 setGem(uuid, amount);
-            }
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                gemsCache.getCachedPlayers().put(player.getUniqueId(), getGems(player.getUniqueId()));
             }
             long time = System.currentTimeMillis() - startTime;
             Bukkit.getLogger().info("Gems cache saved to database. (" + time + "ms)");

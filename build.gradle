@@ -23,8 +23,8 @@ repositories {
 
 dependencies {
     compileOnly 'me.clip:placeholderapi:2.10.9'
-    implementation 'com.github.SaiintBrisson.command-framework:bukkit:1.2.0'
-    implementation 'com.github.HenryFabio:inventory-api:2.0.3'
+    compile 'com.github.SaiintBrisson.command-framework:bukkit:1.2.0'
+    compile 'com.github.HenryFabio:inventory-api:2.0.3'
 
     implementation 'org.xerial:sqlite-jdbc:3.8.11.2'
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'

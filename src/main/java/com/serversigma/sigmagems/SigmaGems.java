@@ -26,11 +26,11 @@ public final class SigmaGems extends JavaPlugin {
     @Getter public static SigmaGems instance;
     @Getter private GemsCache gemsCache;
 
-    SQLProvider provider;
-    KeyManager keyManager;
-    BukkitTask gemsRunnable;
-    GemsManager gemsManager;
-    GemsPlaceHolder placeholder;
+    private SQLProvider provider;
+    private KeyManager keyManager;
+    private BukkitTask gemsRunnable;
+    private GemsManager gemsManager;
+    private GemsPlaceHolder placeholder;
 
     @Override
     public void onEnable() {
@@ -86,12 +86,7 @@ public final class SigmaGems extends JavaPlugin {
         gemsRunnable.cancel();
         gemsManager.saveAll();
         placeholder.unregister();
-
-        try {
-            provider.closeConnection();
-        } catch (Exception exception) {
-            getLogger().severe("Não foi possível fechar a conexão: " + exception.getLocalizedMessage());
-        }
+        provider.closeConnection();
     }
 
     private void registerListeners(Listener... listeners) {

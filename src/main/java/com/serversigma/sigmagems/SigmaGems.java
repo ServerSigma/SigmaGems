@@ -27,7 +27,6 @@ public final class SigmaGems extends JavaPlugin {
     @Getter private GemsCache gemsCache;
 
     private SQLProvider provider;
-    private KeyManager keyManager;
     private BukkitTask gemsRunnable;
     private GemsManager gemsManager;
     private GemsPlaceHolder placeholder;
@@ -38,7 +37,7 @@ public final class SigmaGems extends JavaPlugin {
         provider = new SQLProvider(this, "storage.db");
         gemsCache = new GemsCache(provider);
         gemsManager = new GemsManager(provider, gemsCache);
-        keyManager = new KeyManager(provider);
+        KeyManager keyManager = new KeyManager(provider);
 
         InteractChat interactChat = new InteractChat();
 

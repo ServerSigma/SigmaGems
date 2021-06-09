@@ -4,26 +4,17 @@ import java.text.DecimalFormat;
 
 public class NumberUtils {
 
-    public static String format(Number number) {
+    private static final String[] NUMBER_FORMAT = "k;M;B;T;Q;QQ;S;SS".split(";");
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###.#");
 
-        char[] suffix = {' ', 'k', 'M', 'B', 'T', 'Q'};
-        long numValue = number.longValue();
-        int value = (int) Math.floor(Math.log10(numValue));
-        int base = value / 3;
-        if (value >= 3 && base < suffix.length) {
-            return new DecimalFormat("#0.0").format(numValue / Math.pow(10, base * 3)) + suffix[base];
-        } else {
-            return new DecimalFormat("#,##0").format(numValue);
-        }
+    private static String formatLarge(double n, int iteration) {
+        double f = n / 1000.0D;
+        return f < 1000 || iteration >= NUMBER_FORMAT.length - 1 ?
+                DECIMAL_FORMAT.format(f) + NUMBER_FORMAT[iteration] : formatLarge(f, iteration + 1);
     }
 
-    public static boolean hasLetter(String data) {
-        try {
-            Integer.parseInt(data);
-            return false;
-        } catch (NumberFormatException e) {
-            return true;
-        }
+    public static String format(double value) {
+        return value < 1000 ?  DECIMAL_FORMAT.format(value) : formatLarge(value, 0);
     }
 
 }

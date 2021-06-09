@@ -18,7 +18,7 @@ public class PlayerJoinListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         if (!gemsManager.hasAccount(event.getPlayer().getUniqueId())) {
             gemsManager.setGem(event.getPlayer().getUniqueId(), 0);
-            Bukkit.getConsoleSender().sendMessage("[SigmaPoints] New player created in database.");
+            Bukkit.getConsoleSender().sendMessage("[SigmaGems] New player created in database.");
         }
         gemsCache.setGems(event.getPlayer().getUniqueId(), gemsManager.getGems(event.getPlayer().getUniqueId()));
     }

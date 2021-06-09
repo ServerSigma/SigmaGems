@@ -25,9 +25,9 @@ public class GemsManager {
 
         new Thread(() -> {
             long startTime = System.currentTimeMillis();
-            for (Map.Entry<UUID, Integer> map : gemsCache.getCachedPlayers().entrySet()) {
+            for (Map.Entry<UUID, Double> map : gemsCache.getCachedPlayers().entrySet()) {
                 UUID uuid = map.getKey();
-                int amount = map.getValue();
+                double amount = map.getValue();
                 setGem(uuid, amount);
             }
             long time = System.currentTimeMillis() - startTime;
@@ -36,7 +36,7 @@ public class GemsManager {
     }
 
 
-    public void setGem(UUID id, int quantia) {
+    public void setGem(UUID id, double quantia) {
         if (hasAccount(id)) provider.update("update gemas set quantia=? where player=?", quantia, id.toString());
         else provider.update("insert into gemas(player,quantia) values (?,?)", id.toString(), quantia);
     }
@@ -49,19 +49,19 @@ public class GemsManager {
         ).orElse(false);
     }
 
-    public int getGems(UUID id) {
+    public double getGems(UUID id) {
         return provider.query(
                 "select quantia from gemas where player=?",
-                set -> set.getInt("quantia"),
+                set -> set.getDouble("quantia"),
                 id.toString()
-        ).orElse(0);
+        ).orElse(0.0);
     }
 
-    public void addGems(UUID id, int amount) {
+    public void addGems(UUID id, double amount) {
         setGem(id, getGems(id) + amount);
     }
 
-    public void removeGems(UUID id, int amount) {
+    public void removeGems(UUID id, double amount) {
         setGem(id, getGems(id) - amount);
     }
 
@@ -72,7 +72,7 @@ public class GemsManager {
     public Stream<TemporaryUser> getTops() {
         return provider.map("SELECT * FROM `gemas` ORDER BY `quantia` DESC LIMIT 3", it -> {
             String id = it.getString("player");
-            int gems = it.getInt("quantia");
+            double gems = it.getDouble("quantia");
             return new TemporaryUser(id, gems);
         }).get();
     }
@@ -81,6 +81,6 @@ public class GemsManager {
     @Getter
     public static class TemporaryUser {
         private final String id;
-        private final int gems;
+        private final double gems;
     }
 }

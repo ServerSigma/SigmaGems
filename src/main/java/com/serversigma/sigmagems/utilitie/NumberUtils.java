@@ -14,7 +14,6 @@ public class NumberUtils {
     }
 
     public static String format(double value) {
-        return value < 1000 ?  DECIMAL_FORMAT.format(value) : formatLarge(value, 0);
+        return value < 1000 ? DECIMAL_FORMAT.format(value) : formatLarge(value, 0);
     }
-
 }

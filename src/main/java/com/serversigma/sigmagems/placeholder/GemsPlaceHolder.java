@@ -30,11 +30,8 @@ public class GemsPlaceHolder extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String params) {
-        if (params.equalsIgnoreCase("gemas")) {
-            return NumberUtils.format(gemsCache.getGems(player.getUniqueId()));
-        }
-        return params;
+    public String onPlaceholderRequest(Player player, @NotNull String params) {
+        return NumberUtils.format(gemsCache.getGems(player.getUniqueId()));
     }
 
 }

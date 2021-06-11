@@ -3,6 +3,7 @@ package com.serversigma.sigmagems.utilitie;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("unused")
 public class InteractChat {
 
     public void sendCommandText(Player p, String text, String mousetext, String command) {
@@ -25,7 +26,7 @@ public class InteractChat {
         ClickEvent clicar = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" +
                 command);
         texto.setClickEvent(clicar);
-        p.spigot().sendMessage((BaseComponent) texto);
+        p.spigot().sendMessage(texto);
     }
 
     public void sendText(Player p, String text, String mousetext) {
@@ -34,7 +35,7 @@ public class InteractChat {
         HoverEvent passarOMouser = new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                 textos);
         texto.setHoverEvent(passarOMouser);
-        p.spigot().sendMessage((BaseComponent) texto);
+        p.spigot().sendMessage(texto);
     }
 
     public void sendURL(Player p, String text, String mousetext, String url) {
@@ -44,6 +45,7 @@ public class InteractChat {
                 textos);
         texto.setHoverEvent(passarOMouser);
         texto.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
-        p.spigot().sendMessage((BaseComponent) texto);
+        p.spigot().sendMessage(texto);
     }
+
 }

@@ -5,36 +5,32 @@ import com.serversigma.sigmagems.sql.SQLProvider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class GemsManager {
 
+    private final Plugin plugin;
     private final SQLProvider provider;
     private final GemsCache gemsCache;
 
     public void saveAll() {
-
         if(gemsCache.getCachedPlayers().isEmpty()) return;
-
         new Thread(() -> {
             long startTime = System.currentTimeMillis();
-            for (Map.Entry<UUID, Double> map : gemsCache.getCachedPlayers().entrySet()) {
-                UUID uuid = map.getKey();
-                double amount = map.getValue();
-                setGem(uuid, amount);
+            for (Map.Entry<UUID, Double> entry: gemsCache.getCachedPlayers().entrySet()) {
+                setGem(entry.getKey(), entry.getValue());
             }
             long time = System.currentTimeMillis() - startTime;
-            Bukkit.getLogger().info("Gems cache saved to database. (" + time + "ms)");
+            String log = "Saved " + gemsCache.getCachedPlayers().size() + " accounts in " + time + "ms";
+            plugin.getLogger().info(log);
         }).start();
     }
-
 
     public void setGem(UUID id, double quantia) {
         if (hasAccount(id)) provider.update("update gemas set quantia=? where player=?", quantia, id.toString());
@@ -69,7 +65,7 @@ public class GemsManager {
         return provider.update("delete from gemas where player=?", id.toString());
     }
 
-    public Stream<TemporaryUser> getTops() {
+    public Stream<TemporaryUser> getGemsTop() {
         return provider.map("SELECT * FROM `gemas` ORDER BY `quantia` DESC LIMIT 3", it -> {
             String id = it.getString("player");
             double gems = it.getDouble("quantia");
@@ -77,10 +73,11 @@ public class GemsManager {
         }).get();
     }
 
-    @AllArgsConstructor
     @Getter
+    @AllArgsConstructor
     public static class TemporaryUser {
         private final String id;
         private final double gems;
     }
+
 }

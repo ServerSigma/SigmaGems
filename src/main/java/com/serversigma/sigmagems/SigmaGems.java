@@ -3,7 +3,6 @@ package com.serversigma.sigmagems;
 import com.henryfabio.minecraft.inventoryapi.manager.InventoryManager;
 import com.serversigma.sigmagems.cache.GemsCache;
 import com.serversigma.sigmagems.command.*;
-import com.serversigma.sigmagems.listener.InventoryClickListener;
 import com.serversigma.sigmagems.listener.PlayerJoinListener;
 import com.serversigma.sigmagems.listener.PlayerQuitListener;
 import com.serversigma.sigmagems.manager.GemsManager;
@@ -23,69 +22,93 @@ import org.bukkit.scheduler.BukkitTask;
 
 public final class SigmaGems extends JavaPlugin {
 
-    @Getter public static SigmaGems instance;
-    @Getter private GemsCache gemsCache;
+    @Getter
+    public static SigmaGems instance;
+    @Getter
+    private GemsManager gemsManager;
+    @Getter
+    private GemsCache gemsCache;
 
     private SQLProvider provider;
     private BukkitTask gemsRunnable;
-    private GemsManager gemsManager;
     private GemsPlaceHolder placeholder;
 
     @Override
     public void onEnable() {
+
         instance = this;
+
+        // SQL
         provider = new SQLProvider(this, "storage.db");
-        gemsCache = new GemsCache(provider);
-        gemsManager = new GemsManager(provider, gemsCache);
-        KeyManager keyManager = new KeyManager(provider);
-
-        InteractChat interactChat = new InteractChat();
-
         if (provider.openConnection()) {
             getLogger().info("Connection with SQLite opened with sucessfully.");
-            SQLTables tables = new SQLTables(provider);
+            SQLTables tables = new SQLTables(this, provider);
             tables.createTables();
-
         }
-        gemsManager.saveAll();
-        gemsRunnable = new GemsRunnable(gemsManager).runTaskTimer(this, 300 * 20, 300 * 20);
+
+
+        // Managers
+        gemsCache = new GemsCache();
+        gemsManager = new GemsManager(this, provider, gemsCache);
+        KeyManager keyManager = new KeyManager(provider);
+
+        // Utilities
+        InteractChat interactChat = new InteractChat();
+
+        // Frameworks
         BukkitFrame frame = new BukkitFrame(this);
         frame.setExecutor(new BukkitSchedulerExecutor(this));
 
+        // Dependencies
         InventoryManager.enable(this);
         placeholder = new GemsPlaceHolder(this, gemsCache);
         placeholder.register();
 
+        // A redundant save
+        gemsManager.saveAll();
+
+        // AutoSave
+        gemsRunnable = new GemsRunnable(gemsManager).runTaskTimerAsynchronously(this, 300 * 20, 300 * 20);
+
+        // Listenrs
         registerListeners(
                 new PlayerQuitListener(gemsCache, gemsManager),
-                new PlayerJoinListener(gemsManager, gemsCache),
-                new InventoryClickListener()
+                new PlayerJoinListener(gemsManager, gemsCache)
         );
 
+        // Commands
         frame.registerCommands(
-                new Gem(gemsCache, gemsManager),
-                new GemPayCommand(gemsCache),
+
+                // Gems Commands
+                new GemTopCommand(),
                 new GemHelpCommand(),
-                new GemSaveCommand(gemsManager),
+                new GemSetCommand(gemsCache),
+                new GemPayCommand(gemsCache),
                 new GemGiveCommand(gemsCache),
                 new GemResetCommand(gemsCache),
-                new GemSetCommand(gemsCache),
-                new GemTopCommand(gemsManager),
+                new Gem(gemsCache, gemsManager),
 
+                // Keys Commands
                 new KeyCommand(),
-                new ListKeyCommand(keyManager, interactChat),
-                new NewKeyCommand(keyManager, interactChat),
+                new DeleteKeyCommand(keyManager),
                 new UseKeyCommand(keyManager, gemsCache),
-                new DeleteKeyCommand(keyManager)
+                new NewKeyCommand(keyManager, interactChat),
+                new ListKeyCommand(keyManager, interactChat)
+
         );
     }
 
     @Override
     public void onDisable() {
-        gemsRunnable.cancel();
-        gemsManager.saveAll();
-        placeholder.unregister();
-        provider.closeConnection();
+        try {
+            gemsManager.saveAll();
+            gemsRunnable.cancel();
+            placeholder.unregister();
+        } catch (NullPointerException exception) {
+            getLogger().severe(exception.getMessage());
+        } finally {
+            provider.closeConnection();
+        }
     }
 
     private void registerListeners(Listener... listeners) {

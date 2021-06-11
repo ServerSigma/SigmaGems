@@ -8,6 +8,7 @@ import me.saiintbrisson.minecraft.command.target.CommandTarget;
 import org.bukkit.entity.Player;
 
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class DeleteKeyCommand {
 
     private final KeyManager keyManager;
@@ -24,14 +25,15 @@ public class DeleteKeyCommand {
         Player player = sender.getSender();
 
         if (args.length != 1) {
-            player.sendMessage("§cUse: /key deletar <key>");
+            player.sendMessage("§cUtilize: §7/key deletar <chave>");
             return;
         }
+
         if (keyManager.contains(args[0])) {
             keyManager.deleteKey(args[0]);
-            player.sendMessage("§cVocê deletou a key: " + args[0]);
+            player.sendMessage("§aVocê deletou a chave: " + args[0]);
         } else {
-            player.sendMessage("§cKey inválida.");
+            player.sendMessage("§cChave inválida.");
         }
     }
 

@@ -4,7 +4,10 @@ import java.text.DecimalFormat;
 
 public class NumberUtils {
 
-    private static final String[] NUMBER_FORMAT = "k;M;B;T;Q;QQ;S;SS".split(";");
+    private static final String[] NUMBER_FORMAT =
+            ("k;M;B;T;Q;QQ;S;SS;OC;N;D;UN;DD;TR;QT;QN;SD;SPD;OD;" +
+                    "ND;VG;UVG;DVG;TVG;QTV;QNV;SEV;SPV;OVG;NVG;TG").split(";");
+
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###.#");
 
     private static String formatLarge(double n, int iteration) {
@@ -16,4 +19,14 @@ public class NumberUtils {
     public static String format(double value) {
         return value < 1000 ? DECIMAL_FORMAT.format(value) : formatLarge(value, 0);
     }
+
+    public static boolean isInvalid(String data) {
+        try {
+            Double.parseDouble(data);
+            return false;
+        } catch (NumberFormatException e) {
+            return true;
+        }
+    }
+
 }

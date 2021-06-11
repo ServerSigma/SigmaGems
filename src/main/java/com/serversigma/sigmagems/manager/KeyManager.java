@@ -11,14 +11,12 @@ public class KeyManager {
 
     private final SQLProvider provider;
 
-
-    public void addKey(String key, int amount) {
+    public void addKey(String key, double amount) {
         provider.update("insert into keys(key,quantia) values (?,?)", key, amount);
     }
 
     public void deleteKey(String key) {
         provider.update("delete from keys where key=?", key);
-
     }
 
     public int getKeyValue(String key) {
@@ -40,9 +38,9 @@ public class KeyManager {
     public Stream<Key> getKeys() {
         return provider.map("SELECT * FROM `keys` ", it -> {
             String key = it.getString("key");
-            int amount = it.getInt("quantia");
-
+            double amount = it.getDouble("quantia");
             return new Key(key, amount);
         }).get();
     }
+
 }

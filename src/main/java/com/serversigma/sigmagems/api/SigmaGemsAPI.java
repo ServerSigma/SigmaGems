@@ -1,18 +1,18 @@
 package com.serversigma.sigmagems.api;
 
 import com.serversigma.sigmagems.SigmaGems;
+import com.serversigma.sigmagems.manager.GemsManager;
 import com.serversigma.sigmagems.utilitie.NumberUtils;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class SigmaGemsAPI {
 
-    public static int getGems(Player player) {
+    public static double getGems(Player player) {
         return SigmaGems.instance.getGemsCache().getGems(player.getUniqueId());
     }
 
@@ -20,16 +20,20 @@ public class SigmaGemsAPI {
         return NumberUtils.format(getGems(player));
     }
 
-    public static void setGems(Player player, int amount) {
+    public static void setGems(Player player, double amount) {
         SigmaGems.instance.getGemsCache().setGems(player.getUniqueId(), amount);
     }
 
-    public static void addGems(Player player, int amount) {
+    public static void addGems(Player player, double amount) {
         SigmaGems.instance.getGemsCache().addGems(player.getUniqueId(), amount);
     }
 
-    public static void removeGems(Player player, int amount) {
+    public static void removeGems(Player player, double amount) {
         SigmaGems.instance.getGemsCache().removeGems(player.getUniqueId(), amount);
+    }
+
+    public static Stream<GemsManager.TemporaryUser> getGemsTop() {
+        return SigmaGems.instance.getGemsManager().getGemsTop();
     }
 
 }

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 public class ItemComposer {
 
     private final ItemStack item;
@@ -147,4 +148,5 @@ public class ItemComposer {
     public ItemStack build() {
         return item;
     }
+
 }

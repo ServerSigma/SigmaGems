@@ -6,6 +6,7 @@ import me.saiintbrisson.minecraft.command.command.Context;
 import me.saiintbrisson.minecraft.command.target.CommandTarget;
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("unused")
 public class KeyCommand {
 
     @Command(
@@ -15,19 +16,21 @@ public class KeyCommand {
             usage = "key"
     )
 
-    public void keyCommand(Context<Player> context) {
-        Player player = context.getSender();
+    public void keyCommand(Context<Player> sender) {
 
-        player.sendMessage("");
-        player.sendMessage("§2Sigmas Gemas - Menu de Chaves");
-        player.sendMessage("");
-        player.sendMessage("§2- /key ativar [key] §7(Use para ativar pontos)");
-        if (player.hasPermission("sigmapoints.admin")) {
-            player.sendMessage("§4- §c/key gerar [quantia]");
-            player.sendMessage("§4- §c/key deletar [key]");
-            player.sendMessage("§4- §c/key lista ");
-            player.sendMessage("");
+        sender.sendMessage("");
+        sender.sendMessage("§3Sigmas Gemas §8- §bMenu de chaves");
+        sender.sendMessage("");
+        sender.sendMessage("§b /key ativar <key> §7Ativar uma chave de gemas.");
+
+        if (sender.getSender().hasPermission("sigmagemas.admin")) {
+            sender.sendMessage("§c /key gerar <quantia>");
+            sender.sendMessage("§c /key deletar <chave>");
+            sender.sendMessage("§c /key lista");
         }
+        sender.sendMessage("");
+
     }
+
 }
 

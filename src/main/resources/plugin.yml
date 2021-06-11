@@ -1,4 +1,5 @@
 name: SigmaGems
 version: @version@
 authors: ["DevTuca"]
+depend: [PlaceholderAPI]
 main: com.serversigma.sigmagems.SigmaGems

@@ -1,19 +1,17 @@
 package com.serversigma.sigmagems.cache;
 
-import com.serversigma.sigmagems.sql.SQLProvider;
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Data
+@Getter
 @RequiredArgsConstructor
 public class GemsCache {
 
     private final Map<UUID, Double> cachedPlayers = new HashMap<>();
-    private final SQLProvider sqlProvider;
 
     public double getGems(UUID uuid) {
         return cachedPlayers.get(uuid);

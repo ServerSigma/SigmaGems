@@ -4,7 +4,7 @@ import com.henryfabio.minecraft.inventoryapi.editor.InventoryEditor;
 import com.henryfabio.minecraft.inventoryapi.inventory.impl.simple.SimpleInventory;
 import com.henryfabio.minecraft.inventoryapi.item.InventoryItem;
 import com.henryfabio.minecraft.inventoryapi.viewer.Viewer;
-import com.serversigma.sigmagems.manager.GemsManager;
+import com.serversigma.sigmagems.api.SigmaGemsAPI;
 import com.serversigma.sigmagems.utilitie.ItemComposer;
 import com.serversigma.sigmagems.utilitie.NumberUtils;
 import org.bukkit.Bukkit;
@@ -16,15 +16,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class RankingInventory extends SimpleInventory {
 
-    private final GemsManager gemsManager;
-
-    public RankingInventory(GemsManager gemsManager) {
+    public RankingInventory() {
         super(
                 "sigmagems.inventory",
                 "§8Jogadores com mais gemas",
-                27
+                9 * 3
         );
-        this.gemsManager = gemsManager;
     }
 
     @Override
@@ -32,7 +29,8 @@ public class RankingInventory extends SimpleInventory {
 
         AtomicInteger position = new AtomicInteger();
         AtomicInteger slot = new AtomicInteger(11);
-        gemsManager.getTops().forEach(r -> {
+
+        SigmaGemsAPI.getGemsTop().forEach(r -> {
 
             position.getAndIncrement();
             UUID uuid = UUID.fromString(r.getId());
@@ -49,6 +47,7 @@ public class RankingInventory extends SimpleInventory {
             slot.getAndIncrement();
             editor.setItem(slot.get(), inventoryItem);
         });
+
     }
 
 }

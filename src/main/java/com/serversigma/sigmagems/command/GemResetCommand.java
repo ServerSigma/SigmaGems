@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class GemResetCommand {
 
     private final GemsCache gemsCache;
@@ -20,23 +21,25 @@ public class GemResetCommand {
             permission = "sigmagems.admin",
             usage = "gemas resetar <player>"
     )
+
     public void gemsReset(Context<Player> context, String[] args) {
 
         Player player = context.getSender();
+
         if (args.length != 1) {
-            player.sendMessage("§cUse: /gemas resetar <player> ");
+            player.sendMessage("§cUtilize: §7/gemas resetar <player> ");
             return;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
-            player.sendMessage("§cEste jogador está offline.");
+            player.sendMessage("§cJogador não encontrado.");
             return;
         }
 
         gemsCache.setGems(target.getUniqueId(), 0);
-        player.sendMessage(String.format("§2[SigmaGemas] §aVocê resetou as gemas de %s", target.getName()));
+        player.sendMessage(String.format("§5[Gemas] §aVocê resetou as gemas de %s.", target.getName()));
 
     }
 }

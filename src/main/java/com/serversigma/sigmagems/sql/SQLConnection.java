@@ -36,11 +36,11 @@ public abstract class SQLConnection {
 
     @SneakyThrows
     public void closeConnection() {
-        if (hasConnection()) {
+        if (hasConnection() && con != null) {
             con.close();
-            plugin.getLogger().info("[SigmaPoints] Connection with SQLite closed with sucessfully");
+            plugin.getLogger().info("Connection with SQLite closed with sucessfully");
         } else {
-            plugin.getLogger().severe("[SigmaPoints] Connection with SQLite already closed.");
+            plugin.getLogger().severe("Connection with SQLite already closed.");
         }
     }
 
@@ -48,4 +48,5 @@ public abstract class SQLConnection {
     public boolean hasConnection() {
         return con != null && !con.isClosed();
     }
+
 }

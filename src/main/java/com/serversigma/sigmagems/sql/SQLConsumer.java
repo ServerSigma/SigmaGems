@@ -15,4 +15,5 @@ public interface SQLConsumer<I, O> extends Function<I, O> {
     }
 
     O kApply(I t) throws Exception;
+
 }

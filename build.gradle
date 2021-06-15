@@ -1,42 +1,47 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'net.minecrell.plugin-yml.bukkit' version '0.3.0'
 }
 
 group = 'com.serversigma'
 version = '1.5-SNAPSHOT'
 
-compileJava {
-    options.encoding('UTF-8')
+tasks.build.dependsOn('shadowJar')
 
-    sourceCompatibility('1.8')
-    targetCompatibility('1.8')
+bukkit {
+    version = "${project.version}"
+    authors = ["DevTuca, DevKeni"]
+    softDepend = ["PlaceholderAPI"]
+    main = "com.serversigma.sigmagems.SigmaGems"
 }
+
 repositories {
     mavenCentral()
-    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
-    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
     maven { url = 'https://jitpack.io' }
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
 }
 
 dependencies {
-    implementation 'org.xerial:sqlite-jdbc:3.8.11.2'
-
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
-    compile 'com.github.SaiintBrisson.command-framework:bukkit:1.2.0'
-    compile 'com.github.SaiintBrisson.command-framework:shared:1.2.0'
-    compile 'com.github.HenryFabio:inventory-api:2.0.3'
+    implementation 'com.github.HenryFabio:inventory-api:2.0.3'
+    implementation 'com.github.SaiintBrisson.command-framework:bukkit:1.2.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.20'
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }
 
-processResources {
-    from(sourceSets.main.resources.srcDirs) {
-        filter ReplaceTokens, tokens: [version: version]
-    }
+shadowJar {
+    archiveName("${project.name}-${project.version}.jar")
+}
+
+compileJava {
+    options.encoding('UTF-8')
+
+    sourceCompatibility('1.8')
+    targetCompatibility('1.8')
 }

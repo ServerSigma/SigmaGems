@@ -1,6 +1,6 @@
 package com.serversigma.sigmagems.manager;
 
-import com.serversigma.sigmagems.cache.GemsCache;
+import com.serversigma.sigmagems.SigmaGems;
 import com.serversigma.sigmagems.sql.SQLProvider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,29 +17,38 @@ public class GemsManager {
 
     private final Plugin plugin;
     private final SQLProvider provider;
-    private final GemsCache gemsCache;
 
-    public void saveAll() {
-        if(gemsCache.getCachedPlayers().isEmpty()) return;
+
+    public void saveAll(Map<UUID, Double> cachedPlayers) {
         new Thread(() -> {
             long startTime = System.currentTimeMillis();
-            for (Map.Entry<UUID, Double> entry: gemsCache.getCachedPlayers().entrySet()) {
-                setGem(entry.getKey(), entry.getValue());
+            for (Map.Entry<UUID, Double> entry : cachedPlayers.entrySet()) {
+                setGems(entry.getKey(), entry.getValue());
             }
             long time = System.currentTimeMillis() - startTime;
-            String log = "Saved " + gemsCache.getCachedPlayers().size() + " accounts in " + time + "ms";
-            plugin.getLogger().info(log);
+            String log = "Saved " + cachedPlayers.size() + " accounts in " + time + "ms";
+            SigmaGems.getInstance().getLogger().info(log);
         }).start();
     }
 
-    public void setGem(UUID id, double quantia) {
-        if (hasAccount(id)) provider.update("update gemas set quantia=? where player=?", quantia, id.toString());
-        else provider.update("insert into gemas(player,quantia) values (?,?)", id.toString(), quantia);
+    public void saveAndClose(Map<UUID, Double> cachedPlayers) {
+        for (Map.Entry<UUID, Double> entry : cachedPlayers.entrySet()) {
+            setGems(entry.getKey(), entry.getValue());
+        }
+        provider.closeConnection();
+    }
+
+    public void setGems(UUID id, double quantia) {
+        if (hasAccount(id)) {
+            provider.update("update gems set amount = ? where player = ?", quantia, id.toString());
+        } else {
+            provider.update("insert into gems(player, amount) values (?,?)", id.toString(), quantia);
+        }
     }
 
     public boolean hasAccount(UUID id) {
         return provider.query(
-                "select player from gemas where player=?",
+                "select player from gems where player=?",
                 set -> true,
                 id.toString()
         ).orElse(false);
@@ -47,28 +56,28 @@ public class GemsManager {
 
     public double getGems(UUID id) {
         return provider.query(
-                "select quantia from gemas where player=?",
-                set -> set.getDouble("quantia"),
+                "select amount from gems where player=?",
+                set -> set.getDouble("amount"),
                 id.toString()
         ).orElse(0.0);
     }
 
     public void addGems(UUID id, double amount) {
-        setGem(id, getGems(id) + amount);
+        setGems(id, getGems(id) + amount);
     }
 
     public void removeGems(UUID id, double amount) {
-        setGem(id, getGems(id) - amount);
+        setGems(id, getGems(id) - amount);
     }
 
     public int deletePlayer(UUID id) {
-        return provider.update("delete from gemas where player=?", id.toString());
+        return provider.update("delete from gems where player=?", id.toString());
     }
 
     public Stream<TemporaryUser> getGemsTop() {
-        return provider.map("SELECT * FROM `gemas` ORDER BY `quantia` DESC LIMIT 3", it -> {
+        return provider.map("SELECT * FROM `gems` ORDER BY `amount` DESC LIMIT 5", it -> {
             String id = it.getString("player");
-            double gems = it.getDouble("quantia");
+            double gems = it.getDouble("amount");
             return new TemporaryUser(id, gems);
         }).get();
     }

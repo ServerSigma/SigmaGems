@@ -1,17 +1,17 @@
 package com.serversigma.sigmagems.runnable;
 
-import com.serversigma.sigmagems.manager.GemsManager;
+import com.serversigma.sigmagems.manager.CacheManager;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
 
 @RequiredArgsConstructor
 public class GemsRunnable extends BukkitRunnable {
 
-    private final GemsManager gemsManager;
+    private final CacheManager cache;
 
     @Override
     public void run() {
-        gemsManager.saveAll();
+        cache.saveAll();
     }
 
 }

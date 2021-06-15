@@ -1,64 +1,56 @@
 package com.serversigma.sigmagems.command;
 
-import com.serversigma.sigmagems.cache.GemsCache;
+import com.serversigma.sigmagems.manager.CacheManager;
 import com.serversigma.sigmagems.utilitie.NumberUtils;
 import lombok.RequiredArgsConstructor;
 import me.saiintbrisson.minecraft.command.annotation.Command;
 import me.saiintbrisson.minecraft.command.command.Context;
 import me.saiintbrisson.minecraft.command.target.CommandTarget;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 @SuppressWarnings("unused")
 @RequiredArgsConstructor
 public class GemPayCommand {
 
-    private final GemsCache gemsCache;
+    private final CacheManager cacheManager;
 
     @Command(
-            name = "gemas.enviar",
-            aliases = {"pay", "send", "pagar", "transferir"},
+            name = "gems.pay",
+            aliases = {"enviar", "send"},
             target = CommandTarget.PLAYER,
-            usage = "gemas enviar <player> <amount>"
+            permission = "sigmagems.commands.user",
+            usage = "/gemas enviar <jogador> <quantia>"
     )
 
-    public void gemsPayCommand(Context<Player> context, String[] args) {
+    public void gemsPayCommand(Context<Player> context, Player target, String amount) {
 
         Player player = context.getSender();
 
-        if (args.length != 2) {
-            player.sendMessage("§cUtilize: §7/gemas enviar <player> <quantia>");
-            return;
-        }
+        double parsed = NumberUtils.parse(amount);
 
-        Player target = Bukkit.getPlayer(args[0]);
-
-        if (target == null) {
-            player.sendMessage("§cJogador não encontrado.");
-            return;
-        }
-
-        if (NumberUtils.isInvalid(args[1])) {
+        if (parsed < 0) {
             player.sendMessage("§cDigite uma quantia válida.");
             return;
         }
 
-        double amount = Double.parseDouble(args[1]);
+        if (player.equals(target)) {
+            player.sendMessage("§cVocê não pode enviar gemas para você mesmo.");
+            return;
+        }
 
-        if (gemsCache.getGems(player.getUniqueId()) < amount) {
+        if (cacheManager.get(player.getUniqueId()) < parsed) {
             player.sendMessage("§cVocê não tem gemas suficientes.");
             return;
         }
 
-        gemsCache.addGems(target.getUniqueId(), amount);
-        gemsCache.removeGems(player.getUniqueId(), amount);
+        cacheManager.take(player.getUniqueId(), parsed);
+        cacheManager.increase(target.getUniqueId(), parsed);
 
-        player.sendMessage(String.format("§5[Gemas] §aVocê enviou §7%s §agemas para §7%s.",
-                NumberUtils.format(amount), target.getName()));
+        player.sendMessage(String.format("§5[Gemas] §aVocê enviou §7%s §agemas para §7%s§a.",
+                NumberUtils.format(parsed), target.getName()));
 
-        target.sendMessage(String.format("§5[Gemas] §aVocê recebeu §7%s §agemas de §7%s.",
-                NumberUtils.format(amount), player.getName()));
-
+        target.sendMessage(String.format("§5[Gemas] §aVocê recebeu §7%s §agemas de §7%s§a.",
+                NumberUtils.format(parsed), player.getName()));
     }
 
 }

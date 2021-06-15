@@ -3,16 +3,14 @@ package com.serversigma.sigmagems.sql;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.Plugin;
-import org.sqlite.JDBC;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-@Getter
 public abstract class SQLConnection {
 
-    private Connection con;
+    @Getter private Connection connection;
 
     private final Plugin plugin;
     private final File SQLFile;
@@ -27,26 +25,22 @@ public abstract class SQLConnection {
     @SneakyThrows
     public boolean openConnection() {
         if (hasConnection()) return true;
-        if (!getSQLFile().exists()) plugin.saveResource(fileName, false);
+        if (!SQLFile.exists()) plugin.saveResource(fileName, false);
 
-        DriverManager.registerDriver(new JDBC());
-        con = DriverManager.getConnection("jdbc:sqlite:" + SQLFile);
-        return !con.isClosed();
+        connection = DriverManager.getConnection("jdbc:sqlite:" + SQLFile);
+        return !connection.isClosed();
     }
 
     @SneakyThrows
     public void closeConnection() {
-        if (hasConnection() && con != null) {
-            con.close();
-            plugin.getLogger().info("Connection with SQLite closed with sucessfully");
-        } else {
-            plugin.getLogger().severe("Connection with SQLite already closed.");
+        if (hasConnection()) {
+            connection.close();
         }
     }
 
     @SneakyThrows
     public boolean hasConnection() {
-        return con != null && !con.isClosed();
+        return connection != null && !connection.isClosed();
     }
 
 }

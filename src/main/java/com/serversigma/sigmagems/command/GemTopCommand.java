@@ -12,16 +12,16 @@ import org.bukkit.entity.Player;
 public class GemTopCommand {
 
     @Command(
-            name = "gemas.top",
+            name = "gems.top",
             aliases = {"rank", "ranking"},
+            permission = "sigmagems.commands.user",
             target = CommandTarget.PLAYER,
-            usage = "gemas top"
+            usage = "/gemas rank"
     )
 
-    public void gemsTopCommand(Context<Player> contexts) {
-        Player player = contexts.getSender();
+    public void gemsTopCommand(Context<Player> context) {
+        Player player = context.getSender();
         new RankingInventory().openInventory(player);
-        player.sendMessage("§7Abrindo menu...");
     }
 
 }

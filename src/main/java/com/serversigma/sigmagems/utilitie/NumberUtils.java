@@ -20,12 +20,11 @@ public class NumberUtils {
         return value < 1000 ? DECIMAL_FORMAT.format(value) : formatLarge(value, 0);
     }
 
-    public static boolean isInvalid(String data) {
+    public static double parse(String value) {
         try {
-            Double.parseDouble(data);
-            return false;
-        } catch (NumberFormatException e) {
-            return true;
+            return Double.parseDouble(value.replaceAll("[^0-9]", ""));
+        } catch (Exception exception) {
+            return -1.0;
         }
     }
 

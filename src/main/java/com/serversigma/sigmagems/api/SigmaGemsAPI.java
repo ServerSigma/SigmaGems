@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 public class SigmaGemsAPI {
 
     public static double getGems(Player player) {
-        return SigmaGems.instance.getGemsCache().getGems(player.getUniqueId());
+        return SigmaGems.getInstance().getCacheManager().get(player.getUniqueId());
     }
 
     public static String getGemsFormatted(Player player) {
@@ -21,19 +21,19 @@ public class SigmaGemsAPI {
     }
 
     public static void setGems(Player player, double amount) {
-        SigmaGems.instance.getGemsCache().setGems(player.getUniqueId(), amount);
+        SigmaGems.getInstance().getCacheManager().set(player.getUniqueId(), amount);
     }
 
     public static void addGems(Player player, double amount) {
-        SigmaGems.instance.getGemsCache().addGems(player.getUniqueId(), amount);
+        SigmaGems.getInstance().getCacheManager().increase(player.getUniqueId(), amount);
     }
 
     public static void removeGems(Player player, double amount) {
-        SigmaGems.instance.getGemsCache().removeGems(player.getUniqueId(), amount);
+        SigmaGems.getInstance().getCacheManager().take(player.getUniqueId(), amount);
     }
 
     public static Stream<GemsManager.TemporaryUser> getGemsTop() {
-        return SigmaGems.instance.getGemsManager().getGemsTop();
+        return SigmaGems.getInstance().getGemsManager().getGemsTop();
     }
 
 }

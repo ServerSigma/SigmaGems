@@ -10,7 +10,7 @@ public class GemHelpCommand {
 
     @Command(
             name = "gems",
-            aliases = {"ajuda", "help"},
+            aliases = {"gemas"},
             target = CommandTarget.PLAYER,
             permission = "sigmagems.commands.user",
             usage = "/gemas"

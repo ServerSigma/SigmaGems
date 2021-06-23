@@ -15,6 +15,10 @@ public class CacheManager {
     private final Map<UUID, Double> cachedPlayers = new HashMap<>();
 
     public double get(UUID uuid) {
+        if (!gemsManager.hasAccount(uuid) || !cachedPlayers.containsKey(uuid)) {
+            gemsManager.setGems(uuid, 0);
+            cachedPlayers.put(uuid, gemsManager.getGems(uuid));
+        }
         return cachedPlayers.get(uuid);
     }
 
@@ -27,6 +31,7 @@ public class CacheManager {
     }
 
     public void uncachePlayer(UUID uuid) {
+        save(uuid);
         cachedPlayers.remove(uuid);
     }
 
@@ -35,7 +40,7 @@ public class CacheManager {
     }
 
     public void increase(UUID id, double amount) {
-       set(id, (get(id) + amount));
+        set(id, (get(id) + amount));
     }
 
     public void take(UUID id, double amount) {
